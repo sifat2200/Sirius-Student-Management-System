@@ -36,8 +36,24 @@ The database includes `admin`, `class`, `student`, `student_profiles`, `teacher`
 
 See **[Database ER Diagram](docs/ERD.md)** for the Mermaid diagram and relationship notes.
 
-## Screenshots
-Add genuine screenshots of your running application to `screenshots/` and update the filenames below.
+---
+
+# Application Screenshots
+
+## 1. Homepage
+
+![Sirius Homepage](screenshots/01-homepage.png)
+
+## 2. Login Page
+
+![Sirius Login Page](screenshots/02-login-page.png)
+
+## 3. Admin Dashboard
+
+![Sirius Admin Dashboard](screenshots/03-admin-dashboard.png)
+
+---
+
 
 | Page | Screenshot |
 |---|---|

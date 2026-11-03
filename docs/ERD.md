@@ -1,78 +1,39 @@
 # Sirius – Database ER Diagram
 
-This diagram reflects the tables and foreign-key constraints declared in the supplied SQL dump.
+This diagram represents the tables and declared foreign-key relationships in the supplied SQL schema.
 
 ```mermaid
-erDiagram
-    CLASS ||--o{ STUDENT : has
-    CLASS ||--o{ TEACHER : assigned_to
-    STUDENT ||--o| STUDENT_PROFILES : has
-    TEACHER ||--o| TEACHER_PROFILES : has
+flowchart TB
+    CLASS["CLASS<br/>PK: class_code<br/>class_name, Days, class_time<br/>student_payment, teacher_payment"]
 
-    ADMIN {
-        int admin_id PK
-        varchar username UK
-        varchar password
-        varchar f_name
-        varchar l_name
-    }
+    STUDENT["STUDENT<br/>PK: student_id<br/>FK: class_code<br/>username, name, address, password"]
 
-    CLASS {
-        int class_name
-        varchar class_code PK
-        varchar Days
-        decimal teacher_payment
-        varchar class_time
-        decimal student_payment
-    }
+    TEACHER["TEACHER<br/>PK: teacher_id<br/>FK: class_code<br/>subject_code, username, name, address"]
 
-    STUDENT {
-        varchar username UK
-        varchar password
-        varchar f_name
-        varchar l_name
-        int student_id PK
-        varchar class_code FK
-        varchar Address
-        int class_name
-    }
+    STUDENT_PROFILES["STUDENT_PROFILES<br/>PK: student_id<br/>Profile picture"]
 
-    STUDENT_PROFILES {
-        int student_id PK
-        varchar profile_picture
-    }
+    TEACHER_PROFILES["TEACHER_PROFILES<br/>PK: teacher_id<br/>Profile picture"]
 
-    TEACHER {
-        int teacher_id PK
-        varchar username UK
-        varchar password
-        varchar f_name
-        varchar l_name
-        int subject_code
-        varchar class_code FK
-        varchar Address
-    }
+    ADMIN["ADMIN<br/>PK: admin_id<br/>username, name, password"]
 
-    TEACHER_PROFILES {
-        int teacher_id PK
-        varchar profile_picture
-    }
+    SUBJECTS["SUBJECTS<br/>PK: subject_id<br/>subject, subject_code"]
 
-    SUBJECTS {
-        int subject_id PK
-        varchar subject
-        int subject_code
-    }
+    CLASS -->|"one class to many students"| STUDENT
+    CLASS -->|"one class to many teachers"| TEACHER
+    STUDENT -->|"student_id reference"| STUDENT_PROFILES
+    TEACHER -->|"teacher_id reference"| TEACHER_PROFILES
+
+    TEACHER -.->|"subject_code logical match only"| SUBJECTS
 ```
 
 ## Relationship notes
 
-- One class can be associated with multiple students; each student has an optional `class_code` reference to one class.
-- One class can be associated with multiple teachers; each teacher has an optional `class_code` reference to one class.
-- A student can have zero or one profile-picture record. `student_profiles.student_id` references `student.student_id`.
-- A teacher can have zero or one profile-picture record. `teacher_profiles.teacher_id` references `teacher.teacher_id`.
-- `teacher.subject_code` corresponds conceptually to `subjects.subject_code`, but the supplied SQL dump does not declare a foreign-key constraint for this relationship.
+- One class can be associated with multiple students through `student.class_code`.
+- One class can be associated with multiple teachers through `teacher.class_code`.
+- `student_profiles.student_id` references `student.student_id`.
+- `teacher_profiles.teacher_id` references `teacher.teacher_id`.
+- `teacher.subject_code` corresponds conceptually to `subjects.subject_code`, but the supplied SQL dump does not declare a foreign-key constraint for this relationship. The dotted arrow indicates a logical match, not an enforced foreign key.
 - `admin` and `subjects` are standalone in the declared foreign-key structure.
-- The supplied schema stores payment amounts as fields in `class`; it does not define separate payment tables.
+- Payment amounts are stored as fields in `class`; the supplied schema does not define separate payment tables.
 
-> This diagram represents the supplied database schema. It is not a redesigned or normalized schema.
+> This diagram documents the supplied database schema. It is not a redesigned or normalized schema.
